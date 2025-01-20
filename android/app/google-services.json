@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "198458821695",
+    "project_id": "pureheart-7c124",
+    "storage_bucket": "pureheart-7c124.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:198458821695:android:f9240181f3ad1e48d77c8a",
+        "android_client_info": {
+          "package_name": "com.example.pureheartapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSssPiSMNl76VZPcZ7Ibpp7X2ceO5t0Vk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
