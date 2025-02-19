@@ -11,8 +11,10 @@ import '../../../core/services/shared_pref/shared_pref.dart';
 import '../../../core/utils/app_routes.dart';
 import '../../../core/utils/app_theme.dart';
 import '../../../core/utils/gaps.dart';
+import '../../../main/components/header_section.dart';
 import '../../../main/view/main_view.dart';
 import '../../../widgets/appbar_widget.dart';
+import '../../../widgets/button_widget.dart';
 import '../../../widgets/custom_navigation_bar.dart';
 import '../../../widgets/image/image_widget.dart';
 import '../controller/student_preview_controller.dart';
@@ -419,18 +421,15 @@ class StudentPreviewView extends StatelessWidget {
                                         children: [
                                           Row(
                                             children: [
-                                              CircleAvatar(
-                                                backgroundColor:
-                                                    AppTheme.primaryColor,
-                                                radius: context.width * .04,
-                                                child: SvgImageWidget(
-                                                  image: AppIcons.bookmark,
-                                                ),
-                                              ),
                                               horizontalGap(5),
-                                              FractionalStarRating(
-                                                rating: student.studentRate
-                                                    .toDouble(),
+                                              Text(
+                                                student.studentRate
+                                                    .toDouble()
+                                                    .toString(),
+                                                style: TextStyles.black714
+                                                    .copyWith(
+                                                        fontSize: 25.sp,
+                                                        color: Colors.green),
                                               ),
                                             ],
                                           ),
@@ -460,119 +459,153 @@ class StudentPreviewView extends StatelessWidget {
                                         color: AppTheme.grey,
                                       ),
                                       verticalGap(10.h),
-                                      Text(
-                                        textAlign: TextAlign.right,
-                                        student.description,
-                                        style: TextStyles.black714,
-                                      ),
-                                      verticalGap(10.h),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            textAlign: TextAlign.right,
-                                            "توقيت الحصة : ${student.time}",
-                                            style: TextStyles.black714,
-                                          ),
-                                        ],
-                                      ),
-                                      verticalGap(10.h),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            textAlign: TextAlign.right,
-                                            "تاريخ الحصة : ${student.sessionDate.toString().substring(0, 10)}",
-                                            style: TextStyles.black714,
-                                          ),
-                                        ],
-                                      ),
-                                      verticalGap(10.h),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            textAlign: TextAlign.right,
-                                            "سعر الحصة : ${student.studentPrice}",
-                                            style: TextStyles.black714,
-                                          ),
-                                        ],
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 30.w),
-                                        height: .2.h,
-                                        color: AppTheme.grey,
-                                      ),
-                                      verticalGap(10.h),
-                                      Obx(
-                                        () => Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                CustomRadioButton(
-                                                  title: "موافق",
-                                                  value: "موافق",
-                                                  groupValue: controller
-                                                              .radioSelections[
-                                                          student.id] ??
-                                                      "غير موافق",
-                                                  onChanged: (value) {
-                                                    if (value == "موافق") {
-                                                      controller.createSession({
-                                                        "teacher_token":
-                                                            SharedPref
-                                                                .sharedPreferences
-                                                                .getString(
-                                                                    "token"),
-                                                        "student_ad":
-                                                            student.id,
-                                                      });
-                                                    }
-                                                    controller
-                                                        .updateRadioSelection(
-                                                            student.id, value!);
-                                                  },
-                                                ),
-                                                CustomRadioButton(
-                                                    title: "غير موافق",
-                                                    value: "غير موافق",
-                                                    groupValue: controller
-                                                                .radioSelections[
-                                                            student.id] ??
-                                                        "غير موافق",
-                                                    onChanged: (value) {
-                                                      if (value == "موافق") {
-                                                        controller
-                                                            .createSession({
-                                                          "teacher_token":
-                                                              SharedPref
-                                                                  .sharedPreferences
-                                                                  .getString(
-                                                                      "token"),
-                                                          "student_ad":
-                                                              student.id,
-                                                        });
-                                                      }
 
-                                                      controller
-                                                          .updateRadioSelection(
-                                                              student.id,
-                                                              value!);
-                                                    }),
-                                              ],
-                                            ),
-                                            Text(
-                                              "خيار تحديد الطالب",
-                                              style: TextStyles.black714,
-                                            ),
-                                          ],
-                                        ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                textAlign: TextAlign.right,
+                                                "${student.time} :",
+                                                style: TextStyles.black714,
+                                              ),
+                                              ImageWidget(
+                                                image: AppImages.time,
+                                                width: 40,
+                                                height: 40,
+                                              ),
+                                            ],
+                                          ),
+                                          verticalGap(10.h),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                textAlign: TextAlign.left,
+                                                "دينار",
+                                                style: TextStyles.black714,
+                                              ),
+                                              Text(
+                                                textAlign: TextAlign.left,
+                                                " 2000  :",
+                                                style: TextStyles.black714,
+                                              ),
+                                              horizontalGap(10),
+                                              SvgImageWidget(
+                                                image: AppIcons.dinar,
+                                                width: 40,
+                                                height: 40,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+
+                                      verticalGap(10.h),
+                                      // Row(
+                                      //   mainAxisAlignment:
+                                      //       MainAxisAlignment.end,
+                                      //   children: [
+                                      //     Text(
+                                      //       textAlign: TextAlign.right,
+                                      //       "تاريخ الحصة : ${student.sessionDate.toString().substring(0, 10)}",
+                                      //       style: TextStyles.black714,
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      verticalGap(10.h),
+
+                                      verticalGap(10.h),
+                                      // Obx(
+                                      //   () => Row(
+                                      //     mainAxisAlignment:
+                                      //         MainAxisAlignment.end,
+                                      //     children: [
+                                      //       Row(
+                                      //         children: [
+                                      //           CustomRadioButton(
+                                      //             title: "موافق",
+                                      //             value: "موافق",
+                                      //             groupValue: controller
+                                      //                         .radioSelections[
+                                      //                     student.id] ??
+                                      //                 "غير موافق",
+                                      //             onChanged: (value) {
+                                      //               if (value == "موافق") {
+                                      //                 controller.createSession({
+                                      //                   "teacher_token":
+                                      //                       SharedPref
+                                      //                           .sharedPreferences
+                                      //                           .getString(
+                                      //                               "token"),
+                                      //                   "student_ad":
+                                      //                       student.id,
+                                      //                 });
+                                      //               }
+                                      //               controller
+                                      //                   .updateRadioSelection(
+                                      //                       student.id, value!);
+                                      //             },
+                                      //           ),
+                                      //           CustomRadioButton(
+                                      //               title: "غير موافق",
+                                      //               value: "غير موافق",
+                                      //               groupValue: controller
+                                      //                           .radioSelections[
+                                      //                       student.id] ??
+                                      //                   "غير موافق",
+                                      //               onChanged: (value) {
+                                      //                 if (value == "موافق") {
+                                      //                   controller
+                                      //                       .createSession({
+                                      //                     "teacher_token":
+                                      //                         SharedPref
+                                      //                             .sharedPreferences
+                                      //                             .getString(
+                                      //                                 "token"),
+                                      //                     "student_ad":
+                                      //                         student.id,
+                                      //                   });
+                                      //                 }
+
+                                      //                 controller
+                                      //                     .updateRadioSelection(
+                                      //                         student.id,
+                                      //                         value!);
+                                      //               }),
+                                      //         ],
+                                      //       ),
+                                      //       // Text(
+                                      //       //   "خيار تحديد الطالب",
+                                      //       //   style: TextStyles.black714,
+                                      //       // ),
+                                      //     ],
+                                      //   ),
+                                      // ),
+
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          ButtonWidget(
+                                            color: const Color.fromARGB(
+                                                255, 252, 137, 84),
+                                            width: 150,
+                                            onPressFunction: () async {},
+                                            stringText: "رفض",
+                                          ),
+                                          ButtonWidget(
+                                            color: Colors.green,
+                                            width: 150,
+                                            onPressFunction: () async {},
+                                            stringText: "قبول",
+                                          ),
+                                        ],
                                       )
                                     ],
                                   ),

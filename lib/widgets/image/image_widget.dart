@@ -2,21 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ImageWidget extends StatelessWidget {
-  String? image;
-  double? width, height;
-  BoxFit? fit;
+  final String? image;
+  final double? width, height;
+  final BoxFit? fit;
 
-  ImageWidget({this.image, this.fit, this.height, this.width, Key? key})
-      : super(key: key);
+  const ImageWidget({
+    this.image,
+    this.fit,
+    this.height,
+    this.width,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: width,
       height: height,
+      constraints: const BoxConstraints(
+        minWidth: 1.0,
+        minHeight: 1.0,
+      ),
       child: Image.asset(
-        image.toString(),
+        image ?? '',
         fit: fit ?? BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) =>
+            const Icon(Icons.error, color: Colors.red),
       ),
     );
   }

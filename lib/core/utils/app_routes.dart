@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 import 'package:pureheartapp/teacher_module/teacher_auth/teacher_login/view/teacher_login_view.dart';
 
+import '../../add_money/add_money.dart';
 import '../../main/view/main_view.dart';
+import '../../request_status_feature/view/reqeuest_state_view.dart';
 import '../../role_chose_feature/view/role_selection_view.dart';
 import '../../splash/view/splash_view.dart';
 import '../../student_module/student_auth/student_login/view/student_login_view.dart';
-import '../../student_module/student_main/students_preview/view/teacher_preview.dart';
 import '../../teacher_module/create_paper/view/create_paper.dart';
 import '../../teacher_module/create_paper/view/papers.dart';
 import '../../teacher_module/create_session/session.dart';
@@ -25,6 +26,8 @@ class AppRoutes {
   static String createPaper = "/createPaper";
   static String notebookPage = "/notebookPage";
   static String createSession = "/createSession";
+  static String addMoney = "/addMoney";
+  static String reqeuestStateView = "/reqeuestStateView";
 
   static List<GetPage> routes = [
     GetPage(name: splash, page: () => const SplashView()),
@@ -37,6 +40,8 @@ class AppRoutes {
     GetPage(name: createPaper, page: () => const CreatePaperView()),
     GetPage(name: notebookPage, page: () => NotebookPage()),
     GetPage(name: createSession, page: () => CreateSession()),
+    GetPage(name: addMoney, page: () => AddMoney()),
+    GetPage(name: reqeuestStateView, page: () => ReqeuestStateView()),
   ];
 
   static routePushReplacementUntil(String routeName) {

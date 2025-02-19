@@ -1,59 +1,47 @@
 class StudentAd {
   final int id;
   final int studentId;
+  final int studentStage;
   final int studentPrice;
   final int subjectId;
-  final List<String> days;
   final String time;
-  final String description;
-
   final int status;
   final String studentName;
   final int studentRate;
   final String subjectName;
-  final int studentStage;
   final String studentStepName;
   final DateTime createdAt;
-  final DateTime sessionDate;
 
   StudentAd({
     required this.id,
     required this.studentId,
+    required this.studentStage,
     required this.studentPrice,
     required this.subjectId,
-    required this.days,
     required this.time,
     required this.status,
     required this.studentName,
-    required this.description,
     required this.studentRate,
     required this.subjectName,
-    required this.studentStage,
     required this.studentStepName,
     required this.createdAt,
-    required this.sessionDate,
   });
 
-  // Factory constructor
   factory StudentAd.fromJson(Map<String, dynamic> json) {
     return StudentAd(
       id: json['id'] ?? 0,
       studentId: json['student_id'] ?? 0,
+      studentStage: json['student_stage'] ?? 0,
       studentPrice: json['student_price'] ?? 0,
       subjectId: json['subject_id'] ?? 0,
-      days: List<String>.from(json['days'] ?? []),
       time: json['time'] ?? '',
-      description: json['description'] ?? '',
       status: json['status'] ?? 0,
       studentName: json['student_name'] ?? '',
       studentRate: json['student_rate'] ?? 0,
       subjectName: json['subject_name'] ?? '',
-      studentStage: json['student_stage'] ?? 0,
       studentStepName: json['student_step_name'] ?? '',
       createdAt: DateTime.parse(
           json['created_at'] ?? DateTime.now().toIso8601String()),
-      sessionDate: DateTime.parse(
-          json['session_date'] ?? DateTime.now().toIso8601String()),
     );
   }
 
@@ -61,18 +49,16 @@ class StudentAd {
     return {
       'id': id,
       'student_id': studentId,
+      'student_stage': studentStage,
       'student_price': studentPrice,
       'subject_id': subjectId,
-      'days': days,
       'time': time,
       'status': status,
       'student_name': studentName,
       'student_rate': studentRate,
       'subject_name': subjectName,
-      'student_stage': studentStage,
       'student_step_name': studentStepName,
       'created_at': createdAt.toIso8601String(),
-      'session_date': sessionDate.toIso8601String(),
     };
   }
 
@@ -105,10 +91,9 @@ class StudentAdsResponse {
     required this.data,
   });
 
-  // Factory constructor to create an instance of StudentAdsResponse from JSON
   factory StudentAdsResponse.fromJson(Map<String, dynamic> json) {
     return StudentAdsResponse(
-      status: json['status'] ?? '', // Default value to avoid null
+      status: json['status'] ?? '',
       message: json['message'] ?? '',
       data: (json['data'] as List<dynamic>? ?? [])
           .map((item) => StudentAd.fromJson(item as Map<String, dynamic>))
@@ -116,7 +101,6 @@ class StudentAdsResponse {
     );
   }
 
-  // Method to convert an instance of StudentAdsResponse to JSON
   Map<String, dynamic> toJson() {
     return {
       'status': status,
@@ -152,7 +136,7 @@ class TeacherAd {
   // Factory constructor
   factory TeacherAd.fromJson(Map<String, dynamic> json) {
     return TeacherAd(
-      adId: json['ad_id'] ?? 0,
+      adId: json['id'] ?? 0,
       teacherId: json['teacher_id'] ?? 0,
       teacherPrice: json['teacher_price'] ?? 0,
       description: json['description'] ?? '',
@@ -167,7 +151,7 @@ class TeacherAd {
 
   Map<String, dynamic> toJson() {
     return {
-      'ad_id': adId,
+      'id': adId,
       'teacher_id': teacherId,
       'teacher_price': teacherPrice,
       'description': description,

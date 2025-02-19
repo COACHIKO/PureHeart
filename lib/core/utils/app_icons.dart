@@ -19,7 +19,8 @@ class AppIcons {
   static const String science = "assets/icons/science.svg";
   static const String geography = "assets/icons/geo.svg";
   static const String history = "assets/icons/history.svg";
-  static const String wallet = "assets/images/wallet.svg";
+  static const String wallet = "assets/icons/wallet.svg";
+  static const String dollarr = "assets/icons/dollarr.svg";
 
   static const String dinar = "assets/icons/dinar.svg";
 

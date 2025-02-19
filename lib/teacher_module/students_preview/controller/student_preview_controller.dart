@@ -18,7 +18,7 @@ class StudentsPreviewController extends GetxController {
   Future<void> createSession(data) async {
     try {
       var res = await apiCall.postData(
-          "http://192.168.1.2/pureHeart/api/ad_center/offer.php", data);
+          "http://192.168.1.6/pureHeart/api/ad_center/offer.php", data);
       print(res.body);
       if (res.statusCode == 200) {
         Get.offAllNamed(AppRoutes.main);
@@ -42,7 +42,7 @@ class TeachersPreviewController extends GetxController {
   Future<void> createSession(data) async {
     try {
       var res = await apiCall.postData(
-          "http://192.168.1.2/pureHeart/api/ad_center/offer.php", data);
+          "http://192.168.1.6/pureHeart/api/ad_center/offer.php", data);
       print(res.body);
       if (res.statusCode == 200) {
         Get.offAllNamed(AppRoutes.main);

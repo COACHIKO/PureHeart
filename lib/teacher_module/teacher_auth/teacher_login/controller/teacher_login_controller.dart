@@ -168,17 +168,14 @@ class TeacherLoginController extends GetxController {
         "teacher_name": teacherNameController.text,
         "teacher_subject":
             selectedSubjects.map((subject) => subject.id).toList(),
-        "gender": genderId
+        "gender": genderId.value
       };
       var res = await apiCall.postDataAsGuest(
           body, Variables.TEACHER_REQUEST_ACCOUNT);
-      print(res.body);
       final Map<String, dynamic> errorData = jsonDecode(res.body);
-
       if (200 == res.statusCode) {
-      } else {
-        ShowToast.showSuccessSnackBar(message: errorData['status']);
-      }
+        ShowToast.showSuccessSnackBar(message: "تم طلب تسجيلك بنجاح");
+      } else {}
     } catch (e) {
       print(e);
 
@@ -265,6 +262,4 @@ class TeacherLoginController extends GetxController {
       ),
     );
   }
-
-
 }

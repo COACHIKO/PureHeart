@@ -43,6 +43,16 @@ class AppImages {
   static const String creditCard = "assets/images/credit_card.png";
   static const String profile = "assets/images/profile.png";
   static const String boy = "assets/images/boy.png";
+  static const String man = "assets/images/man.png";
+  static const String women = "assets/images/women.png";
+  static const String time = "assets/images/time.png";
+  static const String doctor = "assets/images/doc.png";
+  static const String wallet = "assets/images/wallet.png";
+  static const String cart = "assets/images/cart.png";
+  static const String dollar = "assets/images/dollar.png";
+  static const String pay = "assets/images/pay.png";
+  static const String withdraw = "assets/images/withdraw.png";
+  static const String card = "assets/images/card.png";
 
   static const String map1 = "assets/images/map1.png";
   static const String building = "assets/images/building.png";

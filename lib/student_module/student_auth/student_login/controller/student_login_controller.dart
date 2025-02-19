@@ -17,6 +17,7 @@ import '../../../../core/utils/network_helper.dart';
 import '../../../../core/utils/text_styles.dart';
 import '../../../../core/utils/toast_helper.dart';
 import '../../../../core/utils/variables.dart';
+import '../model/school_stages_model.dart';
 
 class StudentLoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -26,6 +27,19 @@ class StudentLoginController extends GetxController {
   RxBool isLoading = false.obs;
   NetworkAPICall apiCall = NetworkAPICall();
   var qrCodeData = ''.obs;
+  RxString genderId = 'رجل'.obs; // Initial value can be "رجل" or "إمرأة"
+  Rx<SchoolStagesResponse?> schoolStages = Rx<SchoolStagesResponse?>(null);
+
+  @override
+  void onInit() {
+    super.onInit();
+    getSchoolStages();
+  }
+
+  void updateRadioSelection(String selection) {
+    genderId.value = selection;
+    print(genderId.value);
+  }
 
   Future<void> login(token) async {
     try {
@@ -80,50 +94,6 @@ class StudentLoginController extends GetxController {
     if (image != null) {
       await decode(image.path);
     }
-  }
-
-  int getGradeId(String grade, String stage) {
-    if (stage == "ابتدائى") {
-      switch (grade) {
-        case "الأول":
-          return 1;
-        case "الثاني":
-          return 2;
-        case "الثالث":
-          return 3;
-        case "الرابع":
-          return 4;
-        case "الخامس":
-          return 5;
-        case "السادس":
-          return 6;
-        default:
-          return 0;
-      }
-    } else if (stage == "متوسط") {
-      switch (grade) {
-        case "الأول":
-          return 7;
-        case "الثاني":
-          return 8;
-        case "الثالث":
-          return 9;
-        default:
-          return 0;
-      }
-    } else if (stage == "اعدادى") {
-      switch (grade) {
-        case "الرابع":
-          return 10;
-        case "الخامس":
-          return 11;
-        case "السادس":
-          return 12;
-        default:
-          return 0;
-      }
-    }
-    return 0;
   }
 
   Future<void> decode(String path) async {
@@ -182,15 +152,15 @@ class StudentLoginController extends GetxController {
         "student_name": studentNameController.text,
         "student_stage": studentStage,
       };
+      print(body);
       var res = await apiCall.postDataAsGuest(
           body, Variables.STUDENT_REQUEST_ACCOUNT);
       print(res.body);
       final Map<String, dynamic> errorData = jsonDecode(res.body);
 
       if (200 == res.statusCode) {
-      } else {
-        ShowToast.showSuccessSnackBar(message: errorData['status']);
-      }
+        ShowToast.showSuccessSnackBar(message: "تم طلب تسجيلك بنجاح");
+      } else {}
     } catch (e) {
       print(e);
 
@@ -200,8 +170,48 @@ class StudentLoginController extends GetxController {
     }
   }
 
+  List<SchoolStep> getPrimaryStages() {
+    return schoolStages.value?.schoolSteps
+            .where((step) => step.id >= 1 && step.id <= 6)
+            .toList() ??
+        [];
+  }
+
+  List<SchoolStep> getMiddleStages() {
+    return schoolStages.value?.schoolSteps
+            .where((step) => step.id >= 7 && step.id <= 9)
+            .toList() ??
+        [];
+  }
+
+  List<SchoolStep> getHighSchoolStages() {
+    return schoolStages.value?.schoolSteps
+            .where((step) => step.id >= 10 && step.id <= 12)
+            .toList() ??
+        [];
+  }
+
+  Future<void> getSchoolStages() async {
+    try {
+      setLoading(true);
+      var res = await apiCall.getDataAsGuest(Variables.GET_STAGES);
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(res.body);
+        schoolStages.value = SchoolStagesResponse.fromJson(data);
+      } else {
+        final Map<String, dynamic> errorData = jsonDecode(res.body);
+        ShowToast.showSuccessSnackBar(message: errorData['status']);
+      }
+    } catch (e) {
+      print(e);
+      ShowMessage.toast(e.toString());
+    } finally {
+      setLoading(false);
+    }
+  }
+
   void showGradeDialog(
-      BuildContext context, String stage, List<String> grades) {
+      BuildContext context, String stage, List<SchoolStep> grades) {
     Get.dialog(
       Dialog(
         backgroundColor: Colors.white,
@@ -214,13 +224,15 @@ class StudentLoginController extends GetxController {
                 .map(
                   (grade) => ListTile(
                     title: Text(
-                      grade,
+                      grade.stepName,
                       style: TextStyles.primary616,
                       textAlign: TextAlign.center,
                     ),
                     onTap: () {
-                      selectedGrade.value = "$stage - $grade";
+                      selectedGrade.value = grade.stepName;
                       Get.back();
+
+                      SharedPref.sharedPreferences.setInt("stage", grade.id);
                     },
                   ),
                 )

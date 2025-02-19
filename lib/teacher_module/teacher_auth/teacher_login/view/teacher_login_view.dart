@@ -121,70 +121,93 @@ class TeacherLoginView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 40),
-                Obx(
-                  () => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        RadioButton(
-                          title: "رجل",
-                          value: "رجل",
-                          groupValue: controller.genderId.value,
-                          onChanged: (value) {
-                            controller.updateRadioSelection(value!);
-                          },
-                        ),
-                        RadioButton(
-                          title: "إمرأة",
-                          value: "إمرأة",
-                          groupValue: controller.genderId.value,
-                          onChanged: (value) {
-                            controller.updateRadioSelection(value!);
-                          },
-                        ),
-                        Spacer(),
-                        Text("النوع", style: TextStyles.white614),
-                      ],
-                    ),
-                  ),
-                ),
-                DashedDivider(text: "أو"),
-                SizedBox(height: 20),
-                Obx(() {
-                  return ButtonWidget(
-                    isLoading: controller.isLoading.value,
-                    onPressFunction: () async {
-                      if (controller.formKey.currentState!.validate()) {
-                        await controller.requestCreateAccount();
-                      }
-                    },
-                    width: 180.w,
-                    stringText: "تسجيل الدخول",
-                  );
-                }),
-                SizedBox(height: 20),
-                InkWell(
-                    onTap: () async {
-                      await controller.pickImage();
-                    },
-                    child: Column(
-                      children: [
-                        QrImageView(
-                            data: "login",
-                            size: 100,
-                            eyeStyle: QrEyeStyle(
-                              eyeShape: QrEyeShape.square,
-                              color: Colors.white,
+                Column(
+                  children: [
+                    Obx(
+                      () => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                ImageWidget(
+                                  image: AppImages.man,
+                                  width: 50.w,
+                                  height: 50.h,
+                                  fit: BoxFit.cover,
+                                ),
+                                RadioButton(
+                                  title: "ذكر",
+                                  value: "1",
+                                  groupValue: controller.genderId.value,
+                                  onChanged: (value) {
+                                    controller.updateRadioSelection(value!);
+                                  },
+                                ),
+                              ],
                             ),
-                            foregroundColor: Colors.white),
-                        SizedBox(height: 10),
-                        Text(
-                          "أضغط للتسجيل",
-                          style: TextStyle(fontSize: 14, color: Colors.white),
+                            Column(
+                              children: [
+                                ImageWidget(
+                                  image: AppImages.women,
+                                  width: 50.w,
+                                  height: 50.h,
+                                  fit: BoxFit.cover,
+                                ),
+                                RadioButton(
+                                  title: "أنثئ",
+                                  value: "0",
+                                  groupValue: controller.genderId.value,
+                                  onChanged: (value) {
+                                    controller.updateRadioSelection(value!);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
-                    )),
+                      ),
+                    ),
+                  ],
+                ),
+                DashedDivider(text: "-"),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(width: 30),
+                    InkWell(
+                        onTap: () async {
+                          await controller.pickImage();
+                        },
+                        child: Column(
+                          children: [
+                            QrImageView(
+                                data: "login",
+                                size: 70,
+                                eyeStyle: QrEyeStyle(
+                                  eyeShape: QrEyeShape.square,
+                                  color: Colors.white,
+                                ),
+                                foregroundColor: Colors.white),
+                          ],
+                        )),
+                    Obx(() {
+                      return ButtonWidget(
+                        isLoading: controller.isLoading.value,
+                        onPressFunction: () async {
+                          if (controller.formKey.currentState!.validate()) {
+                            await controller.requestCreateAccount();
+                          }
+                        },
+                        width: 180.w,
+                        stringText: "تسجيل الدخول",
+                      );
+                    }),
+                  ],
+                ),
+                SizedBox(height: 20),
               ],
             ),
           ),

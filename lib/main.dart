@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           themeMode: ThemeMode.dark,
           theme: AqarTheme.darkTheme,
-          title: 'Inmaaa',
+          title: 'PureHeart',
           debugShowCheckedModeBanner: false,
           getPages: AppRoutes.routes,
           initialRoute: getInitialRoute(),

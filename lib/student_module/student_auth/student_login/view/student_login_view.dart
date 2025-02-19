@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pureheartapp/core/services/shared_pref/shared_pref.dart';
 import 'package:pureheartapp/core/utils/app_theme.dart';
 import 'package:get/get.dart';
 import 'package:pureheartapp/widgets/button_widget.dart';
@@ -7,6 +8,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/text_styles.dart';
 import '../../../../teacher_module/students_preview/view/student_preview.dart';
+import '../../../../teacher_module/teacher_auth/teacher_login/view/teacher_login_view.dart';
 import '../../../../widgets/image/image_widget.dart';
 import '../controller/student_login_controller.dart';
 
@@ -115,92 +117,120 @@ class StudentLoginView extends StatelessWidget {
                     StageBox(
                       name: "اعدادى",
                       onTap: () => controller.showGradeDialog(
-                          context, "اعدادى", ["الرابع", "الخامس", "السادس"]),
+                          context, "اعدادى", controller.getHighSchoolStages()),
                     ),
                     StageBox(
                       name: "متوسط",
                       onTap: () => controller.showGradeDialog(
-                          context, "متوسط", ["الأول", "الثاني", "الثالث"]),
+                          context, "متوسط", controller.getMiddleStages()),
                     ),
                     StageBox(
                       name: "ابتدائى",
                       onTap: () => controller.showGradeDialog(
-                          context, "ابتدائى", [
-                        "الأول",
-                        "الثاني",
-                        "الثالث",
-                        "الرابع",
-                        "الخامس",
-                        "السادس"
-                      ]),
+                          context, "ابتدائى", controller.getPrimaryStages()),
                     ),
                   ],
                 ),
                 SizedBox(height: 20),
-                DashedDivider(text: "أو"),
-                SizedBox(height: 20),
-                Obx(() {
-                  return ButtonWidget(
-                    isLoading: controller.isLoading.value,
-                    onPressFunction: () async {
-                      controller.formKey.currentState!.validate();
-                      String selectedGradeValue =
-                          controller.selectedGrade.value;
-
-                      List<String> parts =
-                          selectedGradeValue.split(RegExp(r'\s*-\s*'));
-
-                      if (parts.length == 2) {
-                        String stage = parts[0].trim();
-                        String grade = parts[1].trim();
-
-                        if (stage.isNotEmpty && grade.isNotEmpty) {
-                          int gradeId = controller.getGradeId(grade, stage);
-
-                          if (gradeId != 0) {
-                            controller.isLoading.value = true;
-
-                            await controller.requestCreateAccount(gradeId);
-
-                            controller.isLoading.value = false;
-                          } else {
-                            Get.snackbar(
-                              "خطأ",
-                              "الصف غير موجود",
-                              backgroundColor: Colors.red,
-                              colorText: Colors.white,
-                            );
-                          }
-                        }
-                      }
-                    },
-                    width: 180.w,
-                    stringText: "تسجيل الدخول",
-                  );
-                }),
-                SizedBox(height: 20),
-                InkWell(
-                  onTap: () async {
-                    await controller.pickImage();
-                  },
-                  child: Column(
-                    children: [
-                      QrImageView(
+                Obx(
+                  () => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            ImageWidget(
+                              image: AppImages.man,
+                              width: 50.w,
+                              height: 50.h,
+                              fit: BoxFit.cover,
+                            ),
+                            RadioButton(
+                              title: "ذكر",
+                              value: "ذكر",
+                              groupValue: controller.genderId.value,
+                              onChanged: (value) {
+                                controller.updateRadioSelection(value!);
+                              },
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            ImageWidget(
+                              image: AppImages.women,
+                              width: 50.w,
+                              height: 50.h,
+                              fit: BoxFit.cover,
+                            ),
+                            RadioButton(
+                              title: "أنثئ",
+                              value: "أنثئ",
+                              groupValue: controller.genderId.value,
+                              onChanged: (value) {
+                                controller.updateRadioSelection(value!);
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                DashedDivider(text: "-"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(width: 30),
+                    InkWell(
+                      onTap: () async {
+                        await controller.pickImage();
+                      },
+                      child: QrImageView(
                           data: "login",
-                          size: 100,
+                          size: 70,
                           eyeStyle: QrEyeStyle(
                             eyeShape: QrEyeShape.square,
                             color: Colors.white,
                           ),
                           foregroundColor: Colors.white),
-                      SizedBox(height: 10),
-                      Text(
-                        "أضغط للتسجيل",
-                        style: TextStyle(fontSize: 14, color: Colors.white),
-                      ),
-                    ],
-                  ),
+                    ),
+                    Obx(() {
+                      return ButtonWidget(
+                        isLoading: controller.isLoading.value,
+                        onPressFunction: () async {
+                          if (controller.formKey.currentState!.validate() &&
+                              controller.selectedGrade.value.isNotEmpty) {
+                            int? gradeId = SharedPref().getInt("stage");
+                            if (gradeId != null && gradeId != 0) {
+                              controller.isLoading.value = true;
+                              await controller.requestCreateAccount(gradeId);
+                              controller.isLoading.value = false;
+                            } else {
+                              Get.snackbar(
+                                "خطأ",
+                                "الرجاء اختيار الصف الدراسي",
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            }
+                          } else {
+                            Get.snackbar(
+                              "خطأ",
+                              "الرجاء ملء جميع الحقول المطلوبة",
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white,
+                            );
+                          }
+                        },
+                        width: 180.w,
+                        stringText: "تسجيل الدخول",
+                      );
+                    }),
+                  ],
                 ),
+                SizedBox(height: 20),
               ],
             ),
           ),
